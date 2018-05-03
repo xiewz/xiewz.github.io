@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Uncle XIE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文参考：生信技能树 一、前言拟南芥转录组数据研究与人类研究的数据处理大同小异。 转录组：转录组测序的研究对象为特定细胞在某一功能状态下所能转录出来的所有 RNA 的总和，包括 mRNA 和非编码 RNA。通过转录组测序，能够全面获得物种特定组织或器官的转录本信息，从而进行转录本结构研究、变异研究、基因表达水平研究以及全新转录本发现等研究。其中，基因表达水平的探究是转录组领域最热门的方向，利用转录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Uncle XIE">
+<meta property="og:url" content="http://yoursite.com/2018/05/03/NGS系列#2.拟南芥转录组实践/index.html">
+<meta property="og:site_name" content="Uncle XIE">
+<meta property="og:description" content="本文参考：生信技能树 一、前言拟南芥转录组数据研究与人类研究的数据处理大同小异。 转录组：转录组测序的研究对象为特定细胞在某一功能状态下所能转录出来的所有 RNA 的总和，包括 mRNA 和非编码 RNA。通过转录组测序，能够全面获得物种特定组织或器官的转录本信息，从而进行转录本结构研究、变异研究、基因表达水平研究以及全新转录本发现等研究。其中，基因表达水平的探究是转录组领域最热门的方向，利用转录">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE11adb17b6904c929961a74653636b133/1660">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE7f559237323b03fab66e535b5e14e413/1680">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE993ae537ad6ee5041690062f0d63bd60/1699">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE9208f1ad7bfbb177ef47e0622e77a405/1721">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE00ff347e850662655bb93e373cce33c9/1725">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE6f5293a73bf3fbab89d5bc0f59be98d9/1739">
+<meta property="og:updated_time" content="2018-05-03T14:12:45.574Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Uncle XIE">
+<meta name="twitter:description" content="本文参考：生信技能树 一、前言拟南芥转录组数据研究与人类研究的数据处理大同小异。 转录组：转录组测序的研究对象为特定细胞在某一功能状态下所能转录出来的所有 RNA 的总和，包括 mRNA 和非编码 RNA。通过转录组测序，能够全面获得物种特定组织或器官的转录本信息，从而进行转录本结构研究、变异研究、基因表达水平研究以及全新转录本发现等研究。其中，基因表达水平的探究是转录组领域最热门的方向，利用转录">
+<meta name="twitter:image" content="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE11adb17b6904c929961a74653636b133/1660">
+  
+    <link rel="alternate" href="/atom.xml" title="Uncle XIE" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Uncle XIE</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Bio-IT Technology</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-NGS系列#2.拟南芥转录组实践" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/03/NGS系列#2.拟南芥转录组实践/" class="article-date">
+  <time datetime="2018-05-03T14:14:09.508Z" itemprop="datePublished">2018-05-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文参考：<a href="http://www.bio-info-trainee.com/2809.html" target="_blank" rel="noopener">生信技能树</a></p>
+<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>拟南芥转录组数据研究与人类研究的数据处理大同小异。</p>
+<p><strong>转录组</strong>：转录组测序的研究对象为特定细胞在某一功能状态下所能转录出来的所有 RNA 的总和，包括 mRNA 和非编码 RNA。通过转录组测序，能够全面获得物种特定组织或器官的转录本信息，从而进行转录本结构研究、变异研究、基因表达水平研究以及全新转录本发现等研究。其中，基因表达水平的探究是转录组领域最热门的方向，利用转录组数据来识别转录本和表达定量，是转录组数据的核心作用。由于这个作用，他可以不依赖其他组学信息，单独成为一个产品项目RNA-seq测序。<strong><em>所以很多时候转录组测序会与RNA-seq混为一谈</em></strong>。</p>
+<p>现在RNA-seq数据使用广泛，但是没有一套流程可以解决所有的问题。比较值得关注的RNA-seq分析中的重要的步骤包括：<strong>实验设计，质控，read比对，表达定量，可视化，差异表达，识别可变剪切，功能注释，融合基因检测，eQTL定位等</strong>。</p>
+<h1 id="二、实践步骤"><a href="#二、实践步骤" class="headerlink" title="二、实践步骤"></a>二、实践步骤</h1><h2 id="2-1-数据源"><a href="#2-1-数据源" class="headerlink" title="2.1 数据源"></a>2.1 数据源</h2><p>数据来自于发表在Nature commmunication 上的一篇文章“<a href="https://www.nature.com/articles/ncomms15120" target="_blank" rel="noopener">Temporal dynamics of gene expression and histone marks at the Arabidopsis shoot meristem during flowerin</a>”。原文用RNA-Seq的方式研究在开花阶段,芽分生组织在不同时期的基因表达变化。</p>
+<p>原文的流程是：TopHat -&gt; SummarizeOverlaps -&gt; Deseq2 -&gt; AmiGO 。其中比对的参考基因组为TAIR10 ver.24 ，并且屏蔽了ribosomal RNA regions (2:3471–9557; 3:14,197,350–14,203,988)。</p>
+<p><strong>DESeq2</strong>只计算至少在一个时间段的FPKM的count &gt; 1 的基因。</p>
+<p>数据存放在<a href="http://www.ebi.ac.uk/arrayexpress/" target="_blank" rel="noopener">http://www.ebi.ac.uk/arrayexpress/</a>, ID为<strong>E-MTAB-5130</strong>。实验设计： 4个时间段（0,1,2,3），分别有4个生物学重复，一共有16个样品。</p>
+<h2 id="2-2-数据下载"><a href="#2-2-数据下载" class="headerlink" title="2.2 数据下载"></a>2.2 数据下载</h2><p>下载TAIR数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 安装bioconda和salmon包</span><br><span class="line">conda install -c bioconda salmon </span><br><span class="line"># 首先下载数据文件名列表信息</span><br><span class="line">wget http://www.ebi.ac.uk/arrayexpress/files/E-MTAB-5130/E-MTAB-5130.sdrf.txt</span><br><span class="line"># 获取URI</span><br><span class="line">head -n1 E-MTAB-5130.sdrf.txt | tr &apos;\t&apos; &apos;\n&apos; | nl | grep URI</span><br><span class="line"># 下载数据</span><br><span class="line">tail -n +2 E-MTAB-5130.sdrf.txt | cut -f 33 | xargs -i wget &#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>下载TAIR 的参考数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 下载参考数据集</span><br><span class="line">nohup wget ftp://ftp.ensemblgenomes.org/pub/plants/release-28/fasta/arabidopsis_thaliana/cdna/Arabidopsis_thaliana.TAIR10.28.cdna.all.fa.gz &amp;</span><br><span class="line">nohup wget ftp://ftp.ensemblgenomes.org/pub/plants/release-28/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.28.dna.genome.fa.gz &amp;</span><br><span class="line">nohup wget  ftp://ftp.ensemblgenomes.org/pub/plants/release-28/gff3/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.28.gff3.gz &amp;</span><br><span class="line">nohup wget ftp://ftp.ensemblgenomes.org/pub/plants/release-28/gtf/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.28.gtf.gz &amp;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-3-计算表达量count"><a href="#2-3-计算表达量count" class="headerlink" title="2.3 计算表达量count"></a>2.3 计算表达量count</h2><p>这里试用Salmon和Subread两种方式计算count。</p>
+<h3 id="2-3-1-Salmon流程"><a href="#2-3-1-Salmon流程" class="headerlink" title="2.3.1 Salmon流程"></a>2.3.1 Salmon流程</h3><p><a href="https://combine-lab.github.io/salmon/" target="_blank" rel="noopener">salmon</a>，Salmon is a tool for quantifying the expression of transcripts using RNA-seq data. </p>
+<p>首先下载Salmon，并配置好环境变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 下载Salmon</span><br><span class="line">nohup wget https://github.com/COMBINE-lab/salmon/releases/download/v0.9.1/Salmon-0.9.1_linux_x86_64.tar.gz &amp;</span><br><span class="line"># 解压</span><br><span class="line">tar xzvf Salmon-0.9.1_linux_x86_64.tar.gz</span><br></pre></td></tr></table></figure>
+<p>第一步，先用Salmon建立索引：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 进入参考基因组目录，athal_index为输出目录名</span><br><span class="line">salmon index -t Arabidopsis_thaliana.TAIR10.28.cdna.all.fa.gz -i athal_index</span><br></pre></td></tr></table></figure>
+<p>构建完成后，结果如下图所示。</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE11adb17b6904c929961a74653636b133/1660" alt="image"></p>
+<p>第二步，计算每个样本的定量</p>
+<p>因为涉及到多样本，因此建议采用批处理方式，构建sh脚本如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#! /bin/bash</span><br><span class="line">index=refdata/athal_index ## 指定索引文件夹</span><br><span class="line">for fn in ERR1698&#123;194..209&#125;;</span><br><span class="line">do</span><br><span class="line">    sample=`basename $&#123;fn&#125;`</span><br><span class="line">    echo &quot;Processin sample $&#123;sampe&#125;&quot;</span><br><span class="line">    salmon quant -i $index -l A \</span><br><span class="line">        -1 $&#123;sample&#125;_1.fastq.gz \</span><br><span class="line">        -2 $&#123;sample&#125;_2.fastq.gz \</span><br><span class="line">        -p 5 -o quants/$&#123;sample&#125;_quant</span><br><span class="line">done</span><br><span class="line"># -o表示输出目录</span><br></pre></td></tr></table></figure>
+<p>最后得到如下图所示的结果，其中每个样本单独一个目录，quant.sf中具有TPM值。</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE7f559237323b03fab66e535b5e14e413/1680" alt="image"></p>
+<p>第三步，编写python脚本整合每个样本的TPM或者count值，构建表达谱矩阵。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 代码 略</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-2-subread流程"><a href="#2-3-2-subread流程" class="headerlink" title="2.3.2 subread流程"></a>2.3.2 subread流程</h3><p>除了Salmon流程之外，我们亦可用subread流程分析。步骤如下。</p>
+<p>首先下载安装软件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 下载安装</span><br><span class="line">nohup wget https://sourceforge.net/projects/subread/files/subread-1.6.1/subread-1.6.1-Linux-x86_64.tar.gz &amp;</span><br><span class="line"># 解压并配置环境变量</span><br><span class="line">vim ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>第一步，参考基因组构建索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 首先构建索引，但是这个需要提前解压fa文件</span><br><span class="line">gunzip Arabidopsis_thaliana.TAIR10.28.dna.genome.fa.gz</span><br><span class="line">subread-buildindex -o athal_index   Arabidopsis_thaliana.TAIR10.28.dna.genome.fa</span><br></pre></td></tr></table></figure>
+<p>结果如下图示：</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE993ae537ad6ee5041690062f0d63bd60/1699" alt="image"></p>
+<p>第二步，执行比对。</p>
+<p>构建比对脚本，批量执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#! /bin/bash</span><br><span class="line">subjunc=&quot;/opt/app/bio/subread-1.6.1-Linux-x86_64/bin/subjunc&quot;;</span><br><span class="line"># 新建sub_index目录，将上一步构建的athal_index打头的索引文件移动到此</span><br><span class="line">index=&apos;/data/biodata/exosome/job04/refdata/sub_index/athal_index&apos;;</span><br><span class="line">for fn in ERR1698&#123;194..209&#125;;</span><br><span class="line">do</span><br><span class="line">    sample=`basename $&#123;fn&#125;`</span><br><span class="line">    echo &quot;Processin sample $&#123;sampe&#125;&quot; </span><br><span class="line">    $subjunc -i $index \</span><br><span class="line">        -r $&#123;sample&#125;_1.fastq.gz \</span><br><span class="line">        -R $&#123;sample&#125;_2.fastq.gz \</span><br><span class="line">        -T 5 -o $&#123;sample&#125;_subjunc.bam</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>每个样本均生成bam、bam.indel.vcf、bam.junction.bed三个同名后缀文件，如下图示</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE9208f1ad7bfbb177ef47e0622e77a405/1721" alt="image"></p>
+<p>第三步，定量分析</p>
+<p>第二步输出bam文件，采用featureCounts对之进行定量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gff3=&apos;/data/biodata/exosome/job04/refdata/Arabidopsis_thaliana.TAIR10.28.gff3.gz&apos;;</span><br><span class="line">gtf=&apos;/data/biodata/exosome/job04/refdata/Arabidopsis_thaliana.TAIR10.28.gtf&apos;;</span><br><span class="line">featureCounts=&apos;/opt/app/bio/subread-1.6.1-Linux-x86_64/bin/featureCounts&apos;;</span><br><span class="line">$featureCounts -T 5 -p -t exon -g gene_name -a $gtf -o  counts.txt *.bam</span><br><span class="line">nohup $featureCounts -T 5 -p -t exon -g gene_id -a $gtf -o  counts_id.txt *.bam &amp;</span><br></pre></td></tr></table></figure></p>
+<p>获得如下图所示的结果文件：</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE00ff347e850662655bb93e373cce33c9/1725" alt="image"></p>
+<p>counts和counts_id分别是以基因名和基因id为行名的count矩阵数据，可直接进行后续差异表达等分析。</p>
+<h2 id="2-4-构建分组信息"><a href="#2-4-构建分组信息" class="headerlink" title="2.4 构建分组信息"></a>2.4 构建分组信息</h2><p>从E-MTAB-5130.sdrf.txt获取样本属性信息，指令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -n +2 E-MTAB-5130.sdrf.txt | cut -f 32,36 |sort -u</span><br></pre></td></tr></table></figure>
+<p>结果如下图所示</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE6f5293a73bf3fbab89d5bc0f59be98d9/1739" alt="image"></p>
+<h2 id="2-5-下游分析"><a href="#2-5-下游分析" class="headerlink" title="2.5 下游分析"></a>2.5 下游分析</h2><h3 id="2-5-1-差异表达分析"><a href="#2-5-1-差异表达分析" class="headerlink" title="2.5.1 差异表达分析"></a>2.5.1 差异表达分析</h3><p>下载差异表达分析脚本，或者自行编写分析脚本。此处以前者为例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget  https://raw.githubusercontent.com/jmzeng1314/my-R/master/DEG_scripts/run_DEG.R</span><br><span class="line"># 此处下载表达谱矩阵，上述步骤构建的矩阵最终结果格式，可参考此文本</span><br><span class="line">wget  https://raw.githubusercontent.com/jmzeng1314/my-R/master/DEG_scripts/tair/exprSet.txt</span><br><span class="line"># 下载分组信息</span><br><span class="line">wget  https://raw.githubusercontent.com/jmzeng1314/my-R/master/DEG_scripts/tair/group_info.txt</span><br><span class="line"></span><br><span class="line"># 执行DEG脚本</span><br><span class="line">Rscript ../run_DEG.R -e exprSet.txt -g group_info.txt -c &apos;Day1-Day0&apos; -s counts  -m DESeq2</span><br></pre></td></tr></table></figure>
+<p>如果是转录组的raw counts数据，就选择 -s counts，如果是芯片等normalization好的表达矩阵数据，用默认参数即可。</p>
+<p>对于转录组的raw counts数据，有DEseq2包和edgeR包可供选择。对于芯片等normalization好的表达矩阵数据，有limma和t.test供选择。</p>
+<p>以下是对不同表达矩阵和分组信息的分析案例。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Rscript run_DEG.R -e airway.expression.txt -g airway.group.txt -c &apos;trt-untrt&apos; -s counts -m DESeq2</span><br><span class="line"># Rscript run_DEG.R -e airway.expression.txt -g airway.group.txt -c &apos;trt-untrt&apos; -s counts -m edgeR</span><br><span class="line"># Rscript run_DEG.R -e sCLLex.expression.txt -g sCLLex.group.txt -c &apos;progres.-stable&apos;</span><br><span class="line"># Rscript run_DEG.R -e sCLLex.expression.txt -g sCLLex.group.txt -c &apos;progres.-stable&apos; -m t.test</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/03/NGS系列#2.拟南芥转录组实践/" data-id="cjgqp5d360000z0gw88rtj28r" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/05/03/CentOS-disk-space-resize-online/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/03/NGS系列#2.拟南芥转录组实践/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/03/CentOS-disk-space-resize-online/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/03/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Xie<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

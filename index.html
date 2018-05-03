@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Uncle XIE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="直面人生 勇往直前">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Uncle XIE">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Uncle XIE">
+<meta property="og:description" content="直面人生 勇往直前">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Uncle XIE">
+<meta name="twitter:description" content="直面人生 勇往直前">
+  
+    <link rel="alternate" href="/atom.xml" title="Uncle XIE" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Uncle XIE</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Bio-IT Technology</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-NGS系列#2.拟南芥转录组实践" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/03/NGS系列#2.拟南芥转录组实践/" class="article-date">
+  <time datetime="2018-05-03T14:14:09.508Z" itemprop="datePublished">2018-05-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文参考：<a href="http://www.bio-info-trainee.com/2809.html" target="_blank" rel="noopener">生信技能树</a></p>
+<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>拟南芥转录组数据研究与人类研究的数据处理大同小异。</p>
+<p><strong>转录组</strong>：转录组测序的研究对象为特定细胞在某一功能状态下所能转录出来的所有 RNA 的总和，包括 mRNA 和非编码 RNA。通过转录组测序，能够全面获得物种特定组织或器官的转录本信息，从而进行转录本结构研究、变异研究、基因表达水平研究以及全新转录本发现等研究。其中，基因表达水平的探究是转录组领域最热门的方向，利用转录组数据来识别转录本和表达定量，是转录组数据的核心作用。由于这个作用，他可以不依赖其他组学信息，单独成为一个产品项目RNA-seq测序。<strong><em>所以很多时候转录组测序会与RNA-seq混为一谈</em></strong>。</p>
+<p>现在RNA-seq数据使用广泛，但是没有一套流程可以解决所有的问题。比较值得关注的RNA-seq分析中的重要的步骤包括：<strong>实验设计，质控，read比对，表达定量，可视化，差异表达，识别可变剪切，功能注释，融合基因检测，eQTL定位等</strong>。</p>
+<h1 id="二、实践步骤"><a href="#二、实践步骤" class="headerlink" title="二、实践步骤"></a>二、实践步骤</h1><h2 id="2-1-数据源"><a href="#2-1-数据源" class="headerlink" title="2.1 数据源"></a>2.1 数据源</h2><p>数据来自于发表在Nature commmunication 上的一篇文章“<a href="https://www.nature.com/articles/ncomms15120" target="_blank" rel="noopener">Temporal dynamics of gene expression and histone marks at the Arabidopsis shoot meristem during flowerin</a>”。原文用RNA-Seq的方式研究在开花阶段,芽分生组织在不同时期的基因表达变化。</p>
+<p>原文的流程是：TopHat -&gt; SummarizeOverlaps -&gt; Deseq2 -&gt; AmiGO 。其中比对的参考基因组为TAIR10 ver.24 ，并且屏蔽了ribosomal RNA regions (2:3471–9557; 3:14,197,350–14,203,988)。</p>
+<p><strong>DESeq2</strong>只计算至少在一个时间段的FPKM的count &gt; 1 的基因。</p>
+<p>数据存放在<a href="http://www.ebi.ac.uk/arrayexpress/" target="_blank" rel="noopener">http://www.ebi.ac.uk/arrayexpress/</a>, ID为<strong>E-MTAB-5130</strong>。实验设计： 4个时间段（0,1,2,3），分别有4个生物学重复，一共有16个样品。</p>
+<h2 id="2-2-数据下载"><a href="#2-2-数据下载" class="headerlink" title="2.2 数据下载"></a>2.2 数据下载</h2><p>下载TAIR数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 安装bioconda和salmon包</span><br><span class="line">conda install -c bioconda salmon </span><br><span class="line"># 首先下载数据文件名列表信息</span><br><span class="line">wget http://www.ebi.ac.uk/arrayexpress/files/E-MTAB-5130/E-MTAB-5130.sdrf.txt</span><br><span class="line"># 获取URI</span><br><span class="line">head -n1 E-MTAB-5130.sdrf.txt | tr &apos;\t&apos; &apos;\n&apos; | nl | grep URI</span><br><span class="line"># 下载数据</span><br><span class="line">tail -n +2 E-MTAB-5130.sdrf.txt | cut -f 33 | xargs -i wget &#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>下载TAIR 的参考数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 下载参考数据集</span><br><span class="line">nohup wget ftp://ftp.ensemblgenomes.org/pub/plants/release-28/fasta/arabidopsis_thaliana/cdna/Arabidopsis_thaliana.TAIR10.28.cdna.all.fa.gz &amp;</span><br><span class="line">nohup wget ftp://ftp.ensemblgenomes.org/pub/plants/release-28/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.28.dna.genome.fa.gz &amp;</span><br><span class="line">nohup wget  ftp://ftp.ensemblgenomes.org/pub/plants/release-28/gff3/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.28.gff3.gz &amp;</span><br><span class="line">nohup wget ftp://ftp.ensemblgenomes.org/pub/plants/release-28/gtf/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.28.gtf.gz &amp;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-3-计算表达量count"><a href="#2-3-计算表达量count" class="headerlink" title="2.3 计算表达量count"></a>2.3 计算表达量count</h2><p>这里试用Salmon和Subread两种方式计算count。</p>
+<h3 id="2-3-1-Salmon流程"><a href="#2-3-1-Salmon流程" class="headerlink" title="2.3.1 Salmon流程"></a>2.3.1 Salmon流程</h3><p><a href="https://combine-lab.github.io/salmon/" target="_blank" rel="noopener">salmon</a>，Salmon is a tool for quantifying the expression of transcripts using RNA-seq data. </p>
+<p>首先下载Salmon，并配置好环境变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 下载Salmon</span><br><span class="line">nohup wget https://github.com/COMBINE-lab/salmon/releases/download/v0.9.1/Salmon-0.9.1_linux_x86_64.tar.gz &amp;</span><br><span class="line"># 解压</span><br><span class="line">tar xzvf Salmon-0.9.1_linux_x86_64.tar.gz</span><br></pre></td></tr></table></figure>
+<p>第一步，先用Salmon建立索引：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 进入参考基因组目录，athal_index为输出目录名</span><br><span class="line">salmon index -t Arabidopsis_thaliana.TAIR10.28.cdna.all.fa.gz -i athal_index</span><br></pre></td></tr></table></figure>
+<p>构建完成后，结果如下图所示。</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE11adb17b6904c929961a74653636b133/1660" alt="image"></p>
+<p>第二步，计算每个样本的定量</p>
+<p>因为涉及到多样本，因此建议采用批处理方式，构建sh脚本如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#! /bin/bash</span><br><span class="line">index=refdata/athal_index ## 指定索引文件夹</span><br><span class="line">for fn in ERR1698&#123;194..209&#125;;</span><br><span class="line">do</span><br><span class="line">    sample=`basename $&#123;fn&#125;`</span><br><span class="line">    echo &quot;Processin sample $&#123;sampe&#125;&quot;</span><br><span class="line">    salmon quant -i $index -l A \</span><br><span class="line">        -1 $&#123;sample&#125;_1.fastq.gz \</span><br><span class="line">        -2 $&#123;sample&#125;_2.fastq.gz \</span><br><span class="line">        -p 5 -o quants/$&#123;sample&#125;_quant</span><br><span class="line">done</span><br><span class="line"># -o表示输出目录</span><br></pre></td></tr></table></figure>
+<p>最后得到如下图所示的结果，其中每个样本单独一个目录，quant.sf中具有TPM值。</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE7f559237323b03fab66e535b5e14e413/1680" alt="image"></p>
+<p>第三步，编写python脚本整合每个样本的TPM或者count值，构建表达谱矩阵。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 代码 略</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-2-subread流程"><a href="#2-3-2-subread流程" class="headerlink" title="2.3.2 subread流程"></a>2.3.2 subread流程</h3><p>除了Salmon流程之外，我们亦可用subread流程分析。步骤如下。</p>
+<p>首先下载安装软件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 下载安装</span><br><span class="line">nohup wget https://sourceforge.net/projects/subread/files/subread-1.6.1/subread-1.6.1-Linux-x86_64.tar.gz &amp;</span><br><span class="line"># 解压并配置环境变量</span><br><span class="line">vim ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>第一步，参考基因组构建索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 首先构建索引，但是这个需要提前解压fa文件</span><br><span class="line">gunzip Arabidopsis_thaliana.TAIR10.28.dna.genome.fa.gz</span><br><span class="line">subread-buildindex -o athal_index   Arabidopsis_thaliana.TAIR10.28.dna.genome.fa</span><br></pre></td></tr></table></figure>
+<p>结果如下图示：</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE993ae537ad6ee5041690062f0d63bd60/1699" alt="image"></p>
+<p>第二步，执行比对。</p>
+<p>构建比对脚本，批量执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#! /bin/bash</span><br><span class="line">subjunc=&quot;/opt/app/bio/subread-1.6.1-Linux-x86_64/bin/subjunc&quot;;</span><br><span class="line"># 新建sub_index目录，将上一步构建的athal_index打头的索引文件移动到此</span><br><span class="line">index=&apos;/data/biodata/exosome/job04/refdata/sub_index/athal_index&apos;;</span><br><span class="line">for fn in ERR1698&#123;194..209&#125;;</span><br><span class="line">do</span><br><span class="line">    sample=`basename $&#123;fn&#125;`</span><br><span class="line">    echo &quot;Processin sample $&#123;sampe&#125;&quot; </span><br><span class="line">    $subjunc -i $index \</span><br><span class="line">        -r $&#123;sample&#125;_1.fastq.gz \</span><br><span class="line">        -R $&#123;sample&#125;_2.fastq.gz \</span><br><span class="line">        -T 5 -o $&#123;sample&#125;_subjunc.bam</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>每个样本均生成bam、bam.indel.vcf、bam.junction.bed三个同名后缀文件，如下图示</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE9208f1ad7bfbb177ef47e0622e77a405/1721" alt="image"></p>
+<p>第三步，定量分析</p>
+<p>第二步输出bam文件，采用featureCounts对之进行定量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gff3=&apos;/data/biodata/exosome/job04/refdata/Arabidopsis_thaliana.TAIR10.28.gff3.gz&apos;;</span><br><span class="line">gtf=&apos;/data/biodata/exosome/job04/refdata/Arabidopsis_thaliana.TAIR10.28.gtf&apos;;</span><br><span class="line">featureCounts=&apos;/opt/app/bio/subread-1.6.1-Linux-x86_64/bin/featureCounts&apos;;</span><br><span class="line">$featureCounts -T 5 -p -t exon -g gene_name -a $gtf -o  counts.txt *.bam</span><br><span class="line">nohup $featureCounts -T 5 -p -t exon -g gene_id -a $gtf -o  counts_id.txt *.bam &amp;</span><br></pre></td></tr></table></figure></p>
+<p>获得如下图所示的结果文件：</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE00ff347e850662655bb93e373cce33c9/1725" alt="image"></p>
+<p>counts和counts_id分别是以基因名和基因id为行名的count矩阵数据，可直接进行后续差异表达等分析。</p>
+<h2 id="2-4-构建分组信息"><a href="#2-4-构建分组信息" class="headerlink" title="2.4 构建分组信息"></a>2.4 构建分组信息</h2><p>从E-MTAB-5130.sdrf.txt获取样本属性信息，指令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -n +2 E-MTAB-5130.sdrf.txt | cut -f 32,36 |sort -u</span><br></pre></td></tr></table></figure>
+<p>结果如下图所示</p>
+<p><img src="https://note.youdao.com/yws/public/resource/acde5bfef9fbc8319d0b815d8dcd1761/xmlnote/WEBRESOURCE6f5293a73bf3fbab89d5bc0f59be98d9/1739" alt="image"></p>
+<h2 id="2-5-下游分析"><a href="#2-5-下游分析" class="headerlink" title="2.5 下游分析"></a>2.5 下游分析</h2><h3 id="2-5-1-差异表达分析"><a href="#2-5-1-差异表达分析" class="headerlink" title="2.5.1 差异表达分析"></a>2.5.1 差异表达分析</h3><p>下载差异表达分析脚本，或者自行编写分析脚本。此处以前者为例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget  https://raw.githubusercontent.com/jmzeng1314/my-R/master/DEG_scripts/run_DEG.R</span><br><span class="line"># 此处下载表达谱矩阵，上述步骤构建的矩阵最终结果格式，可参考此文本</span><br><span class="line">wget  https://raw.githubusercontent.com/jmzeng1314/my-R/master/DEG_scripts/tair/exprSet.txt</span><br><span class="line"># 下载分组信息</span><br><span class="line">wget  https://raw.githubusercontent.com/jmzeng1314/my-R/master/DEG_scripts/tair/group_info.txt</span><br><span class="line"></span><br><span class="line"># 执行DEG脚本</span><br><span class="line">Rscript ../run_DEG.R -e exprSet.txt -g group_info.txt -c &apos;Day1-Day0&apos; -s counts  -m DESeq2</span><br></pre></td></tr></table></figure>
+<p>如果是转录组的raw counts数据，就选择 -s counts，如果是芯片等normalization好的表达矩阵数据，用默认参数即可。</p>
+<p>对于转录组的raw counts数据，有DEseq2包和edgeR包可供选择。对于芯片等normalization好的表达矩阵数据，有limma和t.test供选择。</p>
+<p>以下是对不同表达矩阵和分组信息的分析案例。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Rscript run_DEG.R -e airway.expression.txt -g airway.group.txt -c &apos;trt-untrt&apos; -s counts -m DESeq2</span><br><span class="line"># Rscript run_DEG.R -e airway.expression.txt -g airway.group.txt -c &apos;trt-untrt&apos; -s counts -m edgeR</span><br><span class="line"># Rscript run_DEG.R -e sCLLex.expression.txt -g sCLLex.group.txt -c &apos;progres.-stable&apos;</span><br><span class="line"># Rscript run_DEG.R -e sCLLex.expression.txt -g sCLLex.group.txt -c &apos;progres.-stable&apos; -m t.test</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/03/NGS系列#2.拟南芥转录组实践/" data-id="cjgqp5d360000z0gw88rtj28r" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-CentOS-disk-space-resize-online" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/03/CentOS-disk-space-resize-online/" class="article-date">
+  <time datetime="2018-05-03T14:14:01.361Z" itemprop="datePublished">2018-05-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="需求：没有使用-lvm-的Centos-7-系统根目录-磁盘空间紧张，-需要扩容"><a href="#需求：没有使用-lvm-的Centos-7-系统根目录-磁盘空间紧张，-需要扩容" class="headerlink" title="需求：没有使用 lvm 的Centos 7 系统根目录(/)磁盘空间紧张， 需要扩容"></a>需求：没有使用 lvm 的Centos 7 系统根目录(/)磁盘空间紧张， 需要扩容</h3><h3 id="测试案例："><a href="#测试案例：" class="headerlink" title="测试案例："></a>测试案例：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># cat /etc/fstab </span></span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># /etc/fstab</span></span><br><span class="line"><span class="comment"># Created by anaconda on Fri Oct 20 17:59:28 2017</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Accessible filesystems, by reference, are maintained under '/dev/disk'</span></span><br><span class="line"><span class="comment"># See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">UUID=a82ac19d-d56a-49a4-8891-f55acf9bdcc1 /                       ext4    defaults        1 1</span><br><span class="line">UUID=97c7591a-a03f-4868-878e-89faf50d6b32 /boot                   ext4    defaults        1 2</span><br><span class="line">UUID=b416bd9f-615a-4167-9eff-82e6b9c9473a swap                    swap    defaults        0 0</span><br><span class="line"></span><br><span class="line">[root@localhost ~]<span class="comment"># fdisk -l</span></span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 53.7 GB, 53687091200 bytes, 104857600 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label <span class="built_in">type</span>: dos</span><br><span class="line">Disk identifier: 0x0009bc4b</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *        2048      391167      194560   83  Linux</span><br><span class="line">/dev/sda2          391168    39452671    19530752   83  Linux</span><br><span class="line">/dev/sda3        39452672    43358207     1952768   82  Linux swap / Solaris</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost ~]<span class="comment"># df -h</span></span><br><span class="line">Filesystem      Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/sda2        19G  796M   17G   5% /</span><br><span class="line">devtmpfs        986M     0  986M   0% /dev</span><br><span class="line">tmpfs           994M     0  994M   0% /dev/shm</span><br><span class="line">tmpfs           994M  8.6M  986M   1% /run</span><br><span class="line">tmpfs           994M     0  994M   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1       180M   74M   94M  44% /boot</span><br></pre></td></tr></table></figure>
+<p>由上述信息可以看出， 磁盘sda 有53GB的存储空间，其中，分区依次为 <code>/boot</code>, <code>/</code>, <code>swap</code> , 总计分配空间为 22GB， 有剩余空间月30GB。 </p>
+<h3 id="需求：-将-现在的20G空间扩容至-40GB"><a href="#需求：-将-现在的20G空间扩容至-40GB" class="headerlink" title="需求： 将 / 现在的20G空间扩容至 40GB"></a>需求： 将 / 现在的20G空间扩容至 40GB</h3><h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p><strong>根据文件系统的特点， 如果要扩展已有的文件系统， 则该文件系统后面应该有连续的未使用空间。 从上面的信息中， 可以看出 <code>/</code> 后面紧跟的是 <code>swap</code> 分区，而 <code>swap</code> 仅是临时虚拟内存空间， 所以可以考虑将其先删除， 再扩增根分区。 如果不是 交换分区， 而是 诸如 <code>/home</code> 等实际存储数据的分区的话， 下面的方法慎用。</strong></p>
+<h4 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h4><p><strong>在开动之前， 先将需要备份的数据备份下， 确保万无一失</strong></p>
+<ul>
+<li><p>数据备份， 将sda中的应用数据备份到其他硬盘， 防止数据丢失， 具体的备份可以用 <code>cp</code>或者<code>rsync</code> 命令。 这是里测试机， 没有需要备份的数据，略过</p>
+</li>
+<li><p>应用备份： 备份用命令安装的软件， 命令为：<code>rpm -qa --qf &#39;%{NAME}\n&#39;</code></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># rpm -qa --qf '%&#123;NAME&#125;\n' | head -5</span></span><br><span class="line">biosdevname</span><br><span class="line">centos-release</span><br><span class="line">microcode_ctl</span><br><span class="line">filesystem</span><br><span class="line">parted</span><br><span class="line">.......</span><br><span class="line">~~~  </span><br><span class="line"></span><br><span class="line">- 由于现在的 `swap` 占据了一部分空间， 而扩容需要连续的空间， 所以需要先将 `swap `去掉， 在扩容好之后再加回来</span><br><span class="line"></span><br><span class="line">~~~ bash</span><br><span class="line">[root@localhost ~]<span class="comment"># grep -i swap /proc/meminfo </span></span><br><span class="line">SwapCached:            0 kB</span><br><span class="line">SwapTotal:       1952764 kB</span><br><span class="line">SwapFree:        1952764 kB</span><br><span class="line">[root@localhost ~]<span class="comment"># swapoff /dev/sda3 </span></span><br><span class="line">[root@localhost ~]<span class="comment"># </span></span><br><span class="line">[root@localhost ~]<span class="comment"># </span></span><br><span class="line">[root@localhost ~]<span class="comment"># grep -i swap /proc/meminfo </span></span><br><span class="line">SwapCached:            0 kB</span><br><span class="line">SwapTotal:             0 kB</span><br><span class="line">SwapFree:              0 kB</span><br></pre></td></tr></table></figure>
+<p>配置文件 <code>/etc/fstab</code> 中注释掉 swap 一行如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#UUID=b416bd9f-615a-4167-9eff-82e6b9c9473a swap                    swap    defaults        0 0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>根分区(/) 空间调整</li>
+</ul>
+<p>先查看下当前的磁盘分区情况， 留着备用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># fdisk -l /dev/sda</span></span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 53.7 GB, 53687091200 bytes, 104857600 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label <span class="built_in">type</span>: dos</span><br><span class="line">Disk identifier: 0x0009bc4b</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *        2048      391167      194560   83  Linux</span><br><span class="line">/dev/sda2          391168    39452671    19530752   83  Linux</span><br><span class="line">/dev/sda3        39452672    43358207     1952768   82  Linux swap / Solaris</span><br></pre></td></tr></table></figure>
+<p>删除 分区 <code>sda3</code> , 可以使用 <code>fdisk</code> 命令也可以使用 <code>parted</code> 命令， 这里使用的是 <code>parted</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># parted /dev/sda</span></span><br><span class="line">GNU Parted 3.1</span><br><span class="line">Using /dev/sda</span><br><span class="line">Welcome to GNU Parted! Type <span class="string">'help'</span> to view a list of commands.</span><br><span class="line">(parted) <span class="built_in">print</span>                             <span class="comment">#### 输出当前的分区信息                                               </span></span><br><span class="line">Model: VMware, VMware Virtual S (scsi)</span><br><span class="line">Disk /dev/sda: 53.7GB</span><br><span class="line">Sector size (logical/physical): 512B/512B</span><br><span class="line">Partition Table: msdos</span><br><span class="line">Disk Flags: </span><br><span class="line"></span><br><span class="line">Number  Start   End     Size    Type     File system     Flags</span><br><span class="line"> 1      1049kB  200MB   199MB   primary  ext4            boot</span><br><span class="line"> 2      200MB   20.2GB  20.0GB  primary  ext4</span><br><span class="line"> 3      20.2GB  22.2GB  2000MB  primary  linux-swap(v1)</span><br><span class="line"></span><br><span class="line">(parted) <span class="built_in">help</span>          <span class="comment">#### 打印一些帮助信息                                                    </span></span><br><span class="line">  align-check TYPE N                        check partition N <span class="keyword">for</span> TYPE(min|opt) alignment</span><br><span class="line">  <span class="built_in">help</span> [COMMAND]                           <span class="built_in">print</span> general <span class="built_in">help</span>, or <span class="built_in">help</span> on COMMAND</span><br><span class="line">  mklabel,mktable LABEL-TYPE               create a new disklabel (partition table)</span><br><span class="line">  mkpart PART-TYPE [FS-TYPE] START END     make a partition</span><br><span class="line">  name NUMBER NAME                         name partition NUMBER as NAME</span><br><span class="line">  <span class="built_in">print</span> [devices|free|list,all|NUMBER]     display the partition table, available devices, free space, all found partitions, or a particular partition</span><br><span class="line">  quit                                     <span class="built_in">exit</span> program</span><br><span class="line">  rescue START END                         rescue a lost partition near START and END</span><br><span class="line">  rm NUMBER                                delete partition NUMBER</span><br><span class="line">  select DEVICE                            choose the device to edit</span><br><span class="line">  disk_set FLAG STATE                      change the FLAG on selected device</span><br><span class="line">  disk_toggle [FLAG]                       toggle the state of FLAG on selected device</span><br><span class="line">  <span class="built_in">set</span> NUMBER FLAG STATE                    change the FLAG on partition NUMBER</span><br><span class="line">  toggle [NUMBER [FLAG]]                   toggle the state of FLAG on partition NUMBER</span><br><span class="line">  unit UNIT                                <span class="built_in">set</span> the default unit to UNIT</span><br><span class="line">  version                                  display the version number and copyright information of GNU Parted</span><br><span class="line">(parted) rm 3    <span class="comment">####  删除第3个分区</span></span><br><span class="line">(parted) <span class="built_in">print</span> free</span><br><span class="line">Model: VMware, VMware Virtual S (scsi)</span><br><span class="line">Disk /dev/sda: 53.7GB</span><br><span class="line">Sector size (logical/physical): 512B/512B</span><br><span class="line">Partition Table: msdos</span><br><span class="line">Disk Flags: </span><br><span class="line"></span><br><span class="line">Number  Start   End     Size    Type     File system  Flags</span><br><span class="line">        32.3kB  1049kB  1016kB           Free Space</span><br><span class="line"> 1      1049kB  200MB   199MB   primary  ext4         boot</span><br><span class="line"> 2      200MB   20.2GB  20.0GB  primary  ext4</span><br><span class="line">        20.2GB  53.7GB  33.5GB           Free Space</span><br><span class="line"></span><br><span class="line">(parted) quit</span><br></pre></td></tr></table></figure>
+<p>删除掉 swap 空间之后， 我们在用 fdisk -l 看就会发现只剩下2个分区， 如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># fdisk -l</span></span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 53.7 GB, 53687091200 bytes, 104857600 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label <span class="built_in">type</span>: dos</span><br><span class="line">Disk identifier: 0x0009bc4b</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *        2048      391167      194560   83  Linux</span><br><span class="line">/dev/sda2          391168    39452671    19530752   83  Linux</span><br></pre></td></tr></table></figure>
+<p>ok， 现在在 sda2 后面有了连续的剩余空间， 我们下面需要做的就是将sda2扩容。<br>这里， 需要先将  <code>/</code> 分区删除掉， 再在原来的位置重新划分一个分区， 操作过程如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># fdisk /dev/sda</span></span><br><span class="line">Welcome to fdisk (util-linux 2.23.2).</span><br><span class="line"></span><br><span class="line">Changes will remain <span class="keyword">in</span> memory only, until you decide to write them.</span><br><span class="line">Be careful before using the write <span class="built_in">command</span>.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): m</span><br><span class="line">Command action</span><br><span class="line">   a   toggle a bootable flag</span><br><span class="line">   b   edit bsd disklabel</span><br><span class="line">   c   toggle the dos compatibility flag</span><br><span class="line">   d   delete a partition</span><br><span class="line">   g   create a new empty GPT partition table</span><br><span class="line">   G   create an IRIX (SGI) partition table</span><br><span class="line">   l   list known partition types</span><br><span class="line">   m   <span class="built_in">print</span> this menu</span><br><span class="line">   n   add a new partition</span><br><span class="line">   o   create a new empty DOS partition table</span><br><span class="line">   p   <span class="built_in">print</span> the partition table</span><br><span class="line">   q   quit without saving changes</span><br><span class="line">   s   create a new empty Sun disklabel</span><br><span class="line">   t   change a partition system id</span><br><span class="line">   u   change display/entry units</span><br><span class="line">   v   verify the partition table</span><br><span class="line">   w   write table to disk and <span class="built_in">exit</span></span><br><span class="line">   x   extra functionality (experts only)</span><br><span class="line"></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): p</span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 53.7 GB, 53687091200 bytes, 104857600 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label <span class="built_in">type</span>: dos</span><br><span class="line">Disk identifier: 0x0009bc4b</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *        2048      391167      194560   83  Linux</span><br><span class="line">/dev/sda2          391168    39452671    19530752   83  Linux</span><br><span class="line"></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): d</span><br><span class="line">Partition number (1,2, default 2): 2</span><br><span class="line">Partition 2 is deleted</span><br><span class="line"></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): n</span><br><span class="line">Partition <span class="built_in">type</span>:</span><br><span class="line">   p   primary (1 primary, 0 extended, 3 free)</span><br><span class="line">   e   extended</span><br><span class="line">Select (default p): p</span><br><span class="line">Partition number (2-4, default 2): 2</span><br><span class="line">First sector (391168-104857599, default 391168):         <span class="comment">###### 和原来的 sda2 的起始位置一致，不能更改！</span></span><br><span class="line">Using default value 391168</span><br><span class="line">Last sector, +sectors or +size&#123;K,M,G&#125; (391168-104857599, default 104857599): +30G       <span class="comment">#### 要分配的空间大小， 这里为 30GB</span></span><br><span class="line">Partition 2 of <span class="built_in">type</span> Linux and of size 30 GiB is <span class="built_in">set</span></span><br><span class="line"></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): w   <span class="comment">##### 保存分区表</span></span><br><span class="line">The partition table has been altered!</span><br><span class="line"></span><br><span class="line">Calling ioctl() to re-read partition table.</span><br><span class="line"></span><br><span class="line">WARNING: Re-reading the partition table failed with error 16: Device or resource busy.</span><br><span class="line">The kernel still uses the old table. The new table will be used at</span><br><span class="line">the next reboot or after you run partprobe(8) or kpartx(8)</span><br><span class="line">Syncing disks.</span><br></pre></td></tr></table></figure>
+<p>到这里， 新的分区表创建完成， sda2 已经库容到 30GB， 但是在系统里还没有提现出来， 需要重启服务器。<br>操作过程如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># reboot</span></span><br></pre></td></tr></table></figure>
+<p><strong>系统重启完成后执行如下操作</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># df -h</span></span><br><span class="line">Filesystem      Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/sda2        19G  3.2G   15G  19% /</span><br><span class="line">devtmpfs        986M     0  986M   0% /dev</span><br><span class="line">tmpfs           994M     0  994M   0% /dev/shm</span><br><span class="line">tmpfs           994M  8.5M  986M   1% /run</span><br><span class="line">tmpfs           994M     0  994M   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1       180M   74M   94M  44% /boot</span><br><span class="line">[root@localhost ~]<span class="comment"># resize2fs /dev/sda2  #### 调整 sda2 的大小</span></span><br><span class="line">resize2fs 1.42.9 (28-Dec-2013)</span><br><span class="line">Filesystem at /dev/sda2 is mounted on /; on-line resizing required</span><br><span class="line">old_desc_blocks = 3, new_desc_blocks = 4</span><br><span class="line">The filesystem on /dev/sda2 is now 7864320 blocks long.</span><br><span class="line"></span><br><span class="line">[root@localhost ~]<span class="comment"># df -h</span></span><br><span class="line">Filesystem      Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/sda2        30G  3.2G   25G  12% /</span><br><span class="line">devtmpfs        986M     0  986M   0% /dev</span><br><span class="line">tmpfs           994M     0  994M   0% /dev/shm</span><br><span class="line">tmpfs           994M  8.5M  986M   1% /run</span><br><span class="line">tmpfs           994M     0  994M   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1       180M   74M   94M  44% /boot</span><br></pre></td></tr></table></figure>
+<p>可以看到， <code>/</code> 分区成功扩展到30GB</p>
+<ul>
+<li>恢复交换分区</li>
+</ul>
+<p><strong>使用<code>parted</code>创建交换分区占用的硬盘分区</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># parted /dev/sda</span></span><br><span class="line">GNU Parted 3.1</span><br><span class="line">Using /dev/sda</span><br><span class="line">Welcome to GNU Parted! Type <span class="string">'help'</span> to view a list of commands.</span><br><span class="line">(parted) <span class="built_in">print</span>                                                            </span><br><span class="line">Model: VMware, VMware Virtual S (scsi)</span><br><span class="line">Disk /dev/sda: 53.7GB</span><br><span class="line">Sector size (logical/physical): 512B/512B</span><br><span class="line">Partition Table: msdos</span><br><span class="line">Disk Flags: </span><br><span class="line"></span><br><span class="line">Number  Start   End     Size    Type     File system  Flags</span><br><span class="line"> 1      1049kB  200MB   199MB   primary  ext4         boot</span><br><span class="line"> 2      200MB   32.4GB  32.2GB  primary  ext4</span><br><span class="line">(parted) mkpart                                                           </span><br><span class="line">Partition <span class="built_in">type</span>?  primary/extended? primary                                </span><br><span class="line">File system <span class="built_in">type</span>?  [ext2]? </span><br><span class="line">Start? 32.4GB</span><br><span class="line">End? 34.4GB                                                               </span><br><span class="line">(parted) <span class="built_in">print</span>                                                            </span><br><span class="line">Model: VMware, VMware Virtual S (scsi)</span><br><span class="line">Disk /dev/sda: 53.7GB</span><br><span class="line">Sector size (logical/physical): 512B/512B</span><br><span class="line">Partition Table: msdos</span><br><span class="line">Disk Flags: </span><br><span class="line"></span><br><span class="line">Number  Start   End     Size    Type     File system  Flags</span><br><span class="line"> 1      1049kB  200MB   199MB   primary  ext4         boot</span><br><span class="line"> 2      200MB   32.4GB  32.2GB  primary  ext4</span><br><span class="line"> 3      32.4GB  34.4GB  1987MB  primary</span><br><span class="line"></span><br><span class="line">(parted) quit                                                             </span><br><span class="line">Information: You may need to update /etc/fstab.</span><br></pre></td></tr></table></figure>
+<p><strong>创建交换分区的文件系统</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># mkswap /dev/sda3 </span></span><br><span class="line">Setting up swapspace version 1, size = 1940476 KiB</span><br><span class="line">no label, UUID=f8f3a40a-347c-4a98-a136-d0a4a05adc08</span><br></pre></td></tr></table></figure>
+<p>由上述输出信息可以看到， 新的交换分区的<code>uuid</code>为 <code>f8f3a40a-347c-4a98-a136-d0a4a05adc08</code>， 确认下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# ls -la /dev/disk/by-uuid/</span><br><span class="line">total 0</span><br><span class="line">drwxr-xr-x. 2 root root 120 Oct 20 18:59 .</span><br><span class="line">drwxr-xr-x. 6 root root 120 Oct 20 18:52 ..</span><br><span class="line">lrwxrwxrwx. 1 root root   9 Oct 20 18:52 2015-03-31-23-15-10-00 -&gt; ../../sr0</span><br><span class="line">lrwxrwxrwx. 1 root root  10 Oct 20 18:52 97c7591a-a03f-4868-878e-89faf50d6b32 -&gt; ../../sda1</span><br><span class="line">lrwxrwxrwx. 1 root root  10 Oct 20 18:53 a82ac19d-d56a-49a4-8891-f55acf9bdcc1 -&gt; ../../sda2</span><br><span class="line">lrwxrwxrwx. 1 root root  10 Oct 20 18:59 f8f3a40a-347c-4a98-a136-d0a4a05adc08 -&gt; ../../sda3</span><br></pre></td></tr></table></figure>
+<p>新的<code>sda3</code>的<code>uuid</code>为 <code>f8f3a40a-347c-4a98-a136-d0a4a05adc08</code>, 更新到 fstab文件中， 如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># cat /etc/fstab </span></span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># /etc/fstab</span></span><br><span class="line"><span class="comment"># Created by anaconda on Fri Oct 20 17:59:28 2017</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Accessible filesystems, by reference, are maintained under '/dev/disk'</span></span><br><span class="line"><span class="comment"># See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">UUID=a82ac19d-d56a-49a4-8891-f55acf9bdcc1 /                       ext4    defaults        1 1</span><br><span class="line">UUID=97c7591a-a03f-4868-878e-89faf50d6b32 /boot                   ext4    defaults        1 2</span><br><span class="line">UUID=f8f3a40a-347c-4a98-a136-d0a4a05adc08 swap                    swap    defaults        0 0</span><br></pre></td></tr></table></figure>
+<p>开启系统的 swap 配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># swapon /dev/sda3 </span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]<span class="comment"># grep -i swap /proc/meminfo </span></span><br><span class="line">SwapCached:            0 kB</span><br><span class="line">SwapTotal:       1940476 kB</span><br><span class="line">SwapFree:        1940476 kB</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/03/CentOS-disk-space-resize-online/" data-id="cjgqp5d3g0001z0gwxa0lsito" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/03/hello-world/" class="article-date">
+  <time datetime="2018-05-03T10:00:38.067Z" itemprop="datePublished">2018-05-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/03/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/03/hello-world/" data-id="cjgqp5d3j0002z0gwlvp898ac" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/03/NGS系列#2.拟南芥转录组实践/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/03/CentOS-disk-space-resize-online/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/03/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Xie<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
