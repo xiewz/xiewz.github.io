@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="生物,RNA-Seq," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在RNA-Seq的分析中，我们常用RPKM、FPKM和TPM作为转录组数据定量的表示方法。">
+<meta name="keywords" content="生物,RNA-Seq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RNA-Seq转录组定量策略名解">
+<meta property="og:url" content="http://yoursite.com/2017/10/26/RNA-Seq_RPKM,FPKM,RPM,TPM/index.html">
+<meta property="og:site_name" content="MyEASON">
+<meta property="og:description" content="在RNA-Seq的分析中，我们常用RPKM、FPKM和TPM作为转录组数据定量的表示方法。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-05T06:40:54.771Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RNA-Seq转录组定量策略名解">
+<meta name="twitter:description" content="在RNA-Seq的分析中，我们常用RPKM、FPKM和TPM作为转录组数据定量的表示方法。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/26/RNA-Seq_RPKM,FPKM,RPM,TPM/"/>
+
+
+
+
+
+  <title>RNA-Seq转录组定量策略名解 | MyEASON</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MyEASON</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Knowledge share of Bio-IT Technology</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/26/RNA-Seq_RPKM,FPKM,RPM,TPM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="XIE">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MyEASON">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RNA-Seq转录组定量策略名解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-26T15:47:44+08:00">
+                2017-10-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/生物信息学/" itemprop="url" rel="index">
+                    <span itemprop="name">生物信息学</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  在RNA-Seq的分析中，我们常用RPKM、FPKM和TPM作为转录组数据定量的表示方法。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-写在前面"><a href="#1-写在前面" class="headerlink" title="1 写在前面"></a>1 写在前面</h1><p>在RNA-Seq的分析中，我们常用RPKM、FPKM和TPM作为转录组数据定量的表示方法。它们都是对表达量进行标准化的方法，为何不直接用read数表示，而选标准化呢，因为落在一个基因区域内的read数目取决于基因长度和测序深度。基因越长read数目越多，测序深度越高，则一个基因对应的read数目也相对越多。所以必须要标准化，而标准化的对象就是基因长度与测序深度。</p>
+<h1 id="2-四种定量表示方法"><a href="#2-四种定量表示方法" class="headerlink" title="2 四种定量表示方法"></a>2 四种定量表示方法</h1><h2 id="2-1-RPKM"><a href="#2-1-RPKM" class="headerlink" title="2.1 RPKM"></a>2.1 RPKM</h2><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>RPKM：Reads Per Kilobase of exon modelper Million mapped reads (每千个碱基的转录每百万映射读取的reads)，主要用来对单端测序（single-end RNA-seq）进行定量的方法。</p>
+<h4 id="计算公式"><a href="#计算公式" class="headerlink" title="计算公式"></a>计算公式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RPKM = totalexonreads/(mappedreads(Millions)*exonlength(KB))</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>total exon reads</strong>：一个样本mapping到特定基因的外显子上的所有的reads；</li>
+<li><strong>mapped reads ( Millions )</strong> :一个样本的所有reads总和；</li>
+<li><strong>exon length( KB )</strong>：某个基因的长度（外显子的长度的总和，以KB为单位）。</li>
+</ul>
+<h4 id="案例解释"><a href="#案例解释" class="headerlink" title="案例解释"></a>案例解释</h4><p>可以用这个公式计算基因、外显子、转录本的表达，这里以基因的表达为例进行说明。在一个样本中一个基因的RPKM等于落在这个基因上的总的read数(total exon reads)与这个样本的总read数(mapped reads (Millions))和基因长度(exon length( KB )) 的乘积的比值。</p>
+<h4 id="推荐软件"><a href="#推荐软件" class="headerlink" title="推荐软件"></a>推荐软件</h4><p>Range</p>
+<h2 id="2-2-FPKM"><a href="#2-2-FPKM" class="headerlink" title="2.2 FPKM"></a>2.2 FPKM</h2><h4 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h4><p>FPKM：Fragments Per Kilobase of exon model per Million mapped fragments(每千个碱基的转录每百万映射读取的fragments)，主要是针对pair-end测序表达量进行计算。</p>
+<h4 id="计算公式-1"><a href="#计算公式-1" class="headerlink" title="计算公式"></a>计算公式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FPKM = totalfragments/(mappedreads(Millions)*exonlength(KB))</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>total fragments</strong>：一个样本mapping到特定基因的外显子上的所有的fragments；</li>
+<li><strong>mapped reads ( Millions )</strong> :一个样本的所有reads总和；</li>
+<li><strong>exon length( KB )</strong>：某个基因的长度（外显子的长度的总和，以KB为单位）。</li>
+</ul>
+<h4 id="推荐软件-1"><a href="#推荐软件-1" class="headerlink" title="推荐软件"></a>推荐软件</h4><p>cufflinks</p>
+<p>FPKM和RPKM的区别就是一个是fragment，一个是read。对于单末端测序数据，由于Cufflinks计算的时候是将一个read当做一个fragment来算的，故而FPKM等同于RPKM。 对于双末端测序而言，如果一对paired-read都比对上了，那么这<strong>一对paired-read称之为一个fragment</strong>，而如果一对paired-Read中只有一个比对上了，另外一个没有比对上，那么就将这个<strong>比对上的read称之为一个fragment</strong>。而计算RPKM时，<strong><em>如果一对paired-read都比对上了会当成两个read计算，而如果一对paired-read中只有一个比对上了，另外一个没有比对上，那么就计read数为1</em></strong>。 故而即使是理论上将各个参数都设置成一样的，也并不能说FPKM=2RPKM。对于单末端测序，虽然理论上FPKM等同于RPKM, 但是实际上即使是使用同一个mapping软件得到的mapping结果，然后再分别去计算同一个基因的RPKM (自己人工计算，或者用现成的一些软件都能算)和FPKM(用Cufflinks计算)，结果却仍然是不同，因为Cufflinks有自己的模型和自己的一些内在算法。</p>
+<p>FPKM和RPKM通过同时除以L（转录本长度）和N（有效比对的Read（Fregment）总数）的办法，最终将不同样本（或者同个样本在不同条件下）的转录本丰度归一化到一个能够进行量化比较的标准上。</p>
+<h2 id="2-3-RPM"><a href="#2-3-RPM" class="headerlink" title="2.3 RPM"></a>2.3 RPM</h2><h4 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h4><p>RPM：Reads/Counts of exon model per Million mapped reads (每百万映射读取的reads)。</p>
+<h4 id="计算公式-2"><a href="#计算公式-2" class="headerlink" title="计算公式"></a>计算公式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RPM = totalexonreads/mappedreads(Millions)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>total exon reads</strong>：一个样本mapping到特定基因的外显子上的所有的reads；</li>
+<li><strong>mapped reads ( Millions )</strong> :一个样本的所有reads总和；</li>
+</ul>
+<h2 id="2-4-TPM"><a href="#2-4-TPM" class="headerlink" title="2.4 TPM"></a>2.4 TPM</h2><h4 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h4><p>TPM：Transcripts Per Kilobase of exonmodel per Million mapped reads (每千个碱基的转录每百万映射读取的Transcripts)，优化的RPKM计算方法，可以用于同一物种不同组织的比较。</p>
+<h4 id="计算公式-3"><a href="#计算公式-3" class="headerlink" title="计算公式"></a>计算公式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TPMi = &#123;( Ni/Li )*1000000 &#125; / sum( Ni/Li+……..+ Nm/Lm )</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Ni</strong>：mapping到基因i上的read数；</li>
+<li><strong>Li</strong>：基因i的外显子长度的总和。</li>
+</ul>
+<h4 id="案例解释-1"><a href="#案例解释-1" class="headerlink" title="案例解释"></a>案例解释</h4><p>在一个样本中一个基因的TPM：先对每个基因的read数用基因的长度进行校正，之后再用校正后的这个基因read数(Ni/Li)与校正后的这个样本的所有read数（sum(Ni/Li+……..+ Nm/Lm)）求商。由此可知，TPM概括了基因的长度、表达量和基因数目。TPM可以用于同一物种不同组织间的比较，因为sum值总是唯一的。</p>
+<h4 id="推荐软件-2"><a href="#推荐软件-2" class="headerlink" title="推荐软件"></a>推荐软件</h4><p>RSEM</p>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>所有基因的TPM值加起来肯定是1M，因为百分比的总和就是1嘛，与样本无关，各个样本都可以保证TPM库是一样的，这样比较更有意义！</p>
+<h2 id="2-5-总结"><a href="#2-5-总结" class="headerlink" title="2.5 总结"></a>2.5 总结</h2><p>不管是计算FPKM、RPKM，还是计算TPM，我们都要先得到一个ReadCount的矩阵（行为基因，列为样本）。在计算FPKM和RPKM时，都是先按列（也就是这个样本的总read数）进行标化，之后再对对个基因的长度进行标准化。而TPM是先对基因长度进行标准化，之后再对列（这个时候就不再是这个样本的总read数了）进行标化。这样使得最终的TPM矩阵的每列都相同（列和都等于1），<strong>也就是说每个样本中的TPM的和都是一样的</strong>。这样就会使得我们更容易去比较同一个基因在不同样本中所占的read数的比例。而RPKM和FPKM由于最终的表达值矩阵的列和不同，故而不能直接比较同一个基因在不同样本中所占的read数的比例。</p>
+<p>关于TPM与RPKM的关系，生信菜鸟团中一篇写的很乱（PS：生信菜鸟团的文章排版一直让我很鄙视，看着特别累。）的文章<a href="http://www.bio-info-trainee.com/2017.html" target="_blank" rel="noopener">TPM值就是RPKM的百分比嘛！</a>。忽略其在截图中写的标注（也是乱七八糟），我们看最后一句话：</p>
+<blockquote>
+<p>If you have FPKM, you can easily compute TPM:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TPMi = (FPKMi/sum(FPKMj))*10^6</span><br></pre></td></tr></table></figure>
+<p>sum(FPKMj) 表示某一样本下所有基因的FPKM求和。</p>
+<p>而这一篇文章（<a href="http://www.genek.tv/article/23" target="_blank" rel="noopener">点击访问</a>）则列举了具体的分析案例来说明FPKM与TPM之间的关系。</p>
+<h2 id="2-6-附录"><a href="#2-6-附录" class="headerlink" title="2.6 附录"></a>2.6 附录</h2><p>再补充一些定义</p>
+<blockquote>
+<p>如果我们能够明确知道一个细胞中、或者是一定摩尔量的 RNA中，有多少条某种转录本。这叫<strong>绝对定量</strong>。</p>
+</blockquote>
+<blockquote>
+<p>但是，我们在进行转录组测序的时候，并不知道用于建库测序的 RNA来自多少个细胞，总过有多少转录本。所以只能进行相对定量。<strong>相对定量</strong>，描述的是该基因的转录本占样本中所有转录本的百分比。</p>
+</blockquote>
+<blockquote>
+<p>Per Kilobase 是基因长度的单位;</p>
+</blockquote>
+<blockquote>
+<p>Per Millon 是测序深度的单位;</p>
+</blockquote>
+<blockquote>
+<p>当 single-end 测序的时候，RPKM 与 FPKM 是等价的；当 pair-end 测序的时候，应该使用 FPKM。所以，FPKM 是更为通用的单位。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/生物/" rel="tag"># 生物</a>
+          
+            <a href="/tags/RNA-Seq/" rel="tag"># RNA-Seq</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/18/GEO-microarray-data-analysis/" rel="next" title="GEO芯片数据分析">
+                <i class="fa fa-chevron-left"></i> GEO芯片数据分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/14/Method Of Literature Search/" rel="prev" title="英文文献检索方法综述">
+                英文文献检索方法综述 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjIzMy8xMjc2OA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="XIE" />
+            
+              <p class="site-author-name" itemprop="name">XIE</p>
+              <p class="site-description motion-element" itemprop="description">直面人生 勇往直前</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-写在前面"><span class="nav-number">1.</span> <span class="nav-text">1 写在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-四种定量表示方法"><span class="nav-number">2.</span> <span class="nav-text">2 四种定量表示方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-RPKM"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 RPKM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义"><span class="nav-number">2.1.0.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算公式"><span class="nav-number">2.1.0.2.</span> <span class="nav-text">计算公式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#案例解释"><span class="nav-number">2.1.0.3.</span> <span class="nav-text">案例解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推荐软件"><span class="nav-number">2.1.0.4.</span> <span class="nav-text">推荐软件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-FPKM"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 FPKM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义-1"><span class="nav-number">2.2.0.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算公式-1"><span class="nav-number">2.2.0.2.</span> <span class="nav-text">计算公式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推荐软件-1"><span class="nav-number">2.2.0.3.</span> <span class="nav-text">推荐软件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-RPM"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 RPM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义-2"><span class="nav-number">2.3.0.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算公式-2"><span class="nav-number">2.3.0.2.</span> <span class="nav-text">计算公式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-TPM"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 TPM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义-3"><span class="nav-number">2.4.0.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算公式-3"><span class="nav-number">2.4.0.2.</span> <span class="nav-text">计算公式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#案例解释-1"><span class="nav-number">2.4.0.3.</span> <span class="nav-text">案例解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推荐软件-2"><span class="nav-number">2.4.0.4.</span> <span class="nav-text">推荐软件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点"><span class="nav-number">2.4.0.5.</span> <span class="nav-text">优点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-总结"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-附录"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 附录</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">XIE</span>
+  <!--<a href="http://www.miitbeian.gov.cn/">粤ICP备18010524号</a>-->
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
