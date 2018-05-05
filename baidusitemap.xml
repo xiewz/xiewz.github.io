@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+    
+  <url>
+    <loc>http://yoursite.com/2017/11/14/Method%20Of%20Literature%20Search/</loc>
+    <lastmod>2018-05-05T06:50:59.115Z</lastmod>
+    <data>
+        <display>
+        <title>英文文献检索方法综述</title>
+        <pubTime>2017-11-14T07:47:44.000Z</pubTime>
+        
+        <tag>文献检索</tag>
+         
+         
+           
+             
+              <breadCrumb title="生物信息学" url="http://yoursite.com/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/10/26/RNA-Seq_RPKM,FPKM,RPM,TPM/</loc>
+    <lastmod>2018-05-05T06:40:54.771Z</lastmod>
+    <data>
+        <display>
+        <title>RNA-Seq转录组定量策略名解</title>
+        <pubTime>2017-10-26T07:47:44.000Z</pubTime>
+        
+        <tag>生物</tag>
+         
+        <tag>RNA-Seq</tag>
+         
+         
+           
+             
+              <breadCrumb title="生物信息学" url="http://yoursite.com/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/10/18/GEO-microarray-data-analysis/</loc>
+    <lastmod>2018-05-05T06:36:30.082Z</lastmod>
+    <data>
+        <display>
+        <title>GEO芯片数据分析</title>
+        <pubTime>2017-10-18T07:47:44.000Z</pubTime>
+        
+        <tag>生物</tag>
+         
+        <tag>GEO</tag>
+         
+         
+           
+             
+              <breadCrumb title="生物信息学" url="http://yoursite.com/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2018/04/15/NGS-No1-RNA-Seq-Homo/</loc>
+    <lastmod>2018-05-04T06:37:38.041Z</lastmod>
+    <data>
+        <display>
+        <title>NGS系列#1.RNA-Seq实践</title>
+        <pubTime>2018-04-15T07:47:44.000Z</pubTime>
+        
+        <tag>生物</tag>
+         
+        <tag>NGS</tag>
+         
+        <tag>RNA-Seq</tag>
+         
+         
+           
+             
+              <breadCrumb title="生物信息学" url="http://yoursite.com/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2018/05/02/NGS-No2-RNA-Seq-Arabidopsis/</loc>
+    <lastmod>2018-05-04T06:37:20.393Z</lastmod>
+    <data>
+        <display>
+        <title>NGS系列#2.拟南芥转录组分析实践</title>
+        <pubTime>2018-05-02T04:47:44.000Z</pubTime>
+        
+        <tag>生物</tag>
+         
+        <tag>NGS</tag>
+         
+        <tag>RNA-Seq</tag>
+         
+         
+           
+             
+              <breadCrumb title="生物信息学" url="http://yoursite.com/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/05/13/CentOS-disk-space-resize-online/</loc>
+    <lastmod>2018-05-04T06:36:42.146Z</lastmod>
+    <data>
+        <display>
+        <title>Centos-disk-space-resize-online</title>
+        <pubTime>2017-05-13T07:20:44.000Z</pubTime>
+        
+        <tag>Linux</tag>
+         
+        <tag>磁盘扩容</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://yoursite.com/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/10/14/TCGA-No1-DataDownload-Quantity/</loc>
+    <lastmod>2018-05-04T06:35:15.426Z</lastmod>
+    <data>
+        <display>
+        <title>TCGA数据分析系列--1.数据下载与质控</title>
+        <pubTime>2017-10-14T15:47:44.000Z</pubTime>
+        
+        <tag>生物</tag>
+         
+        <tag>TCGA</tag>
+         
+         
+           
+             
+              <breadCrumb title="生物信息学" url="http://yoursite.com/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+</urlset>
